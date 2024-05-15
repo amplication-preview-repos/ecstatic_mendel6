@@ -1,0 +1,33 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model MinecraftServer {
+  createdAt               DateTime               @default(now())
+  id                      String                 @id @default(cuid())
+  instanceId              String?
+  instanceSpecification   InstanceSpecification? @relation(fields: [instanceSpecificationId], references: [id])
+  instanceSpecificationId String?
+  serverName              String?
+  status                  String?
+  updatedAt               DateTime               @updatedAt
+}
+
+model InstanceSpecification {
+  additionalParameters Json?
+  amiId                String?
+  createdAt            DateTime          @default(now())
+  id                   String            @id @default(cuid())
+  instanceType         String?
+  keyName              String?
+  minecraftServers     MinecraftServer[]
+  region               String?
+  securityGroupIds     String?
+  subnetId             String?
+  updatedAt            DateTime          @updatedAt
+}
